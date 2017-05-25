@@ -1,7 +1,6 @@
 package com.vakhnenko;
 
 import com.vakhnenko.service.PredecessorGit;
-
 import org.apache.log4j.Logger;
 
 public class App {
@@ -14,21 +13,3 @@ public class App {
         logger.info("Applicaion done...");
     }
 }
-
-/*
-
-public void processFilesFromFolder(File folder)
-{
-    File[] folderEntries = folder.listFiles();
-    for (File entry : folderEntries)
-    {
-        if (entry.isDirectory())
-        {
-            processFilesFromFolder(entry);
-            continue;
-        }
-        // иначе вам попался файл, обрабатывайте его!
-    }
-}
-
- */
