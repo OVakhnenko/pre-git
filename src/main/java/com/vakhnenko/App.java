@@ -1,8 +1,17 @@
 package com.vakhnenko;
 
+import com.vakhnenko.service.PredecessorGit;
+
+import org.apache.log4j.Logger;
+
 public class App {
+    public static final Logger logger = Logger.getLogger(App.class);
+
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        logger.info("Applicaion start...");
+        PredecessorGit predecessorGit = new PredecessorGit(args);
+        predecessorGit.run();
+        logger.info("Applicaion done...");
     }
 }
 
