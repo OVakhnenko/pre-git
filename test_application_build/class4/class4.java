@@ -1,4 +1,4 @@
-class class1 {
+class class4 {
     void func1() {
     }
 
