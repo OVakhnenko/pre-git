@@ -8,4 +8,8 @@ public class PrintHelper {
         logger.error("Usage:");
         logger.error("pre-git analize <project_directory>");
     }
+
+    public static void printIOError(String file) {
+        logger.error(file + " IO error!");
+    }
 }

@@ -7,9 +7,9 @@ public class App {
     public static final Logger logger = Logger.getLogger(App.class);
 
     public static void main(String[] args) {
-        logger.info("Applicaion start...");
+        logger.info("\nApplicaion start...");
         PredecessorGit predecessorGit = new PredecessorGit(args);
         predecessorGit.run();
-        logger.info("Applicaion done...");
+        logger.info("\nApplicaion done...");
     }
 }
