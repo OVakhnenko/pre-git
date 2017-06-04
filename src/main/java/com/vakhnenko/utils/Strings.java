@@ -20,6 +20,10 @@ public class Strings {
                 string.indexOf(ANNOTATION_SEPARATOR)).trim();
     }
 
+    public static String getAnntotationValue(String string, String annotaion) {
+        return string.substring(string.indexOf(annotaion) + annotaion.length() + 1);
+    }
+
     public static String getClazz(String string) {
         return string.substring(string.indexOf(CLASS_SIGN) + CLASS_SIZE + 1,
                 string.indexOf(CLASS_SEPARATOR)).trim();
@@ -30,7 +34,7 @@ public class Strings {
                 string.indexOf(METHOD_SEPARATOR)).trim();
     }
 
-    public static int leftSpace(String mainString, String subString) {
+    private static int leftSpace(String mainString, String subString) {
         int result = mainString.indexOf(subString);
 
         while (mainString.charAt(result) != ' ') {

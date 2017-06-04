@@ -1,20 +1,23 @@
 package com.vakhnenko.service;
 
+import com.vakhnenko.dao.ChangesDao;
 import com.vakhnenko.entity.Changes;
+import com.vakhnenko.utils.ConnectionUtilHibernate;
 import com.vakhnenko.utils.PrintHelper;
 
 import java.io.*;
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 
 import static com.vakhnenko.App.logger;
 import static com.vakhnenko.utils.Constants.*;
+import static com.vakhnenko.utils.Dates.yyyyMMdd2String;
 import static com.vakhnenko.utils.Files.*;
 import static com.vakhnenko.utils.Strings.*;
 
 public class PredecessorGit {
     private String[] commands;
     private ArrayList<String> files = new ArrayList<>();
+    private ChangesDao changesDao = new ChangesDao(ConnectionUtilHibernate.getSessionFactory());
 
     public PredecessorGit(String[] commands) {
         this.commands = commands;
@@ -65,33 +68,58 @@ public class PredecessorGit {
                 tmpString = shrink(tmpString);
                 logger.info(tmpString);
 
-                boolean foundAnnotation = tmpString.indexOf(ANNOTATION_SIGN) != -1;
-                boolean foundClass = tmpString.indexOf(CLASS_SIGN) != -1;
-                boolean foundMethod = tmpString.indexOf(METHOD_SIGN) != -1;
+                boolean foundAnnotation = tmpString.contains(ANNOTATION_SIGN);
+                boolean foundClass = tmpString.contains(CLASS_SIGN);
+                boolean foundMethod = tmpString.contains(METHOD_SIGN);
 
                 if (!foundAnnotation & !foundClass & !foundMethod) {
                     continue;
                 }
 
-                String tmpAnnotation = "";
                 if (foundAnnotation) {
-                    tmpAnnotation = getAnntotation(tmpString);
+                    String tmpAnnotation = getAnntotation(tmpString);
+                    String tmpAnnotaionValue = getAnntotationValue(tmpString, tmpAnnotation);
                     logger.info("found annotation - " + swq(tmpAnnotation));
+
+                    switch (tmpAnnotation) {
+                        case "AUTHOR":
+                            changes.setAuthor(tmpAnnotaionValue);
+                            break;
+                        case "DATE":
+                            changes.setDate(yyyyMMdd2String(tmpAnnotaionValue));
+                            break;
+                        case "REASON":
+                            changes.setReason(tmpAnnotaionValue);
+                            break;
+                    }
                 }
 
-                String tmpClass = "";
                 if (!foundAnnotation && foundClass) {
-                    tmpClass = getClazz(tmpString);
+                    String tmpClass = getClazz(tmpString);
                     logger.info("found class - " + swq(tmpClass));
+                    changes.setType(CLASS_TYPE);
+                    changes.setUnit(tmpClass);
+
+                    if (changes.filled()) {
+                        logger.info("save changes - " + changes);
+                        changesDao.add(changes);
+                        changes.clear();
+                    }
                 }
 
-                String tmpMethod = "";
                 if (!foundAnnotation && foundMethod) {
-                    tmpMethod = getMethod(tmpString);
+                    String tmpMethod = getMethod(tmpString);
                     logger.info("found method - " + swq(tmpMethod));
+                    changes.setType(METHOD_TYPE);
+                    changes.setUnit(tmpMethod);
+
+                    if (changes.filled()) {
+                        logger.info("save changes - " + changes);
+                        changesDao.add(changes);
+                        changes.clear();
+                    }
                 }
             }
-
 
         } catch (IOException e) {
             PrintHelper.printIOError(file);
