@@ -5,6 +5,9 @@ public class Constants {
     public static final int SECOND_POSITION = 1;
 
     public static final String ANALIZE_COMMAND = "ANALIZE";
+    public static final String QUERY_COMMAND = "QUERY";
+
+    public static final String QUERY_HISTORY = "HISTORY";
 
     public static final String ANNOTATION_SIGN = "//@";
     public static final int ANNOTATION_SIZE = ANNOTATION_SIGN.length();

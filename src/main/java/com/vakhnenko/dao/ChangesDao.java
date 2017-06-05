@@ -33,6 +33,16 @@ public class ChangesDao extends dao<Changes> {
     }
 
     public List<Changes> list() {
-        return null;
+        List<Changes> result = null;
+
+        try {
+            session = sessionFactory.openSession();
+            result = session.createQuery("from Changes order by date").list();
+        } catch (Exception e) {
+            logger.error("Hibernate transaction error!");
+        } finally {
+            session.close();
+        }
+        return result;
     }
 }

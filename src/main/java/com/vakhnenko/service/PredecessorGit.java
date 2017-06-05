@@ -7,6 +7,7 @@ import com.vakhnenko.utils.PrintHelper;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.vakhnenko.App.logger;
 import static com.vakhnenko.utils.Constants.*;
@@ -36,6 +37,13 @@ public class PredecessorGit {
                     break;
                 }
                 analize(commands[SECOND_POSITION]);
+                break;
+            case QUERY_COMMAND:
+                if (commands.length != 2) {
+                    PrintHelper.printSyntaxError();
+                    break;
+                }
+                query(commands[SECOND_POSITION].toUpperCase());
                 break;
             default:
                 PrintHelper.printSyntaxError();
@@ -123,6 +131,28 @@ public class PredecessorGit {
 
         } catch (IOException e) {
             PrintHelper.printIOError(file);
+        }
+    }
+
+    private void query(String queryCommand) {
+        switch (queryCommand) {
+            case QUERY_HISTORY:
+                queryHistory();
+                break;
+            default:
+                PrintHelper.printSyntaxError();
+        }
+    }
+
+    private void queryHistory() {
+        List<Changes> listChanges = changesDao.list();
+
+        if (listChanges.size() > 0) {
+            for (Changes changes : listChanges) {
+                logger.info(changes);
+            }
+        } else {
+            logger.info("Not found any changes.");
         }
     }
 }
