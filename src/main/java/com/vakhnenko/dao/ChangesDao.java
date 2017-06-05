@@ -18,6 +18,7 @@ public class ChangesDao extends dao<Changes> {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public void add(Changes item) {
         try {
             session = sessionFactory.openSession();
@@ -32,6 +33,7 @@ public class ChangesDao extends dao<Changes> {
         }
     }
 
+    @Override
     public List<Changes> list() {
         List<Changes> result = null;
 
